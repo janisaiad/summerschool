@@ -1,0 +1,52 @@
+# Python-specific directories
+SCIML.egg-info/
+.venv/
+# Lock files
+uv.lock
+tach.lock
+# Test cache
+.pytest_cache/
+# Story files
+.specstory/
+# Python bytecode
+pycache/
+# Python package directories
+*.egg-info/
+# Python unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+# Python build directories
+build/
+dist/
+# Python debugging tool directories
+pybuilder/
+# Python profiling tool directories
+profile/
+# Python packaging tool directories
+pip-wheel-metadata/
+# Python compiled files
+*.py[cod]
+# End of Selection
+*.pyc
+*.log
+*.gif
+*.npy
+data/test_data/big_dataset_fno/heat2d/sol.npy
+data/test_data/big_dataset_fno/heat2d/xs.npy
+data/test_data/big_dataset_fno/heat2d/mu.npy
+*.npy
+*.gif
+*.keras
+__pycache__/
+.ruff_cache/
+.tach/
+.vscode/
+.idea/
+.DS_Store
+.env
+.vscode/

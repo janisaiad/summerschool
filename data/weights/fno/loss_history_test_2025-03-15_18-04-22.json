@@ -1,0 +1,1 @@
+[0.07294988632202148, 0.016384124755859375, 0.017267296090722084, 0.007425345946103334, 0.0019531752914190292]{"p_1": 30, "p_2": 30, "p_3": 30, "device": "GPU", "n_epochs": 100, "index": 450, "alpha": 0.5, "folder_path": "data/test_data/big_dataset_fno/heat2d/"}{"n_layers": 4, "dim_coords": 2, "n_modes": 30, "activation": "relu", "kernel_initializer": "he_normal"}

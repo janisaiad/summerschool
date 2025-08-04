@@ -1,0 +1,1 @@
+{"n_mu": 1000, "nx": 30, "ny": 30, "nt": 500, "alpha": 0.05, "freq_range": [0.5, 5.0], "gaussian_means_range": [0.30023183994759456, 0.6998648480561105], "gaussian_variance_range": [0.010025202719589558, 0.09983013722315072], "initial_conditions": ["Gaussian: exp(-((x-mean_x)^2 + (y-mean_y)^2)/(2*var))", "Sinusoidal: sin(2\u03c0fx)cos(2\u03c0fy) + cos(2\u03c0fx)sin(2\u03c0fy)"]}

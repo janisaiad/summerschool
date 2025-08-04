@@ -1,0 +1,58 @@
+    \documentclass[aspectratio=169]{beamer}
+    \usepackage{listings}
+    \usepackage{xcolor}
+    
+    \definecolor{codegreen}{rgb}{0,0.6,0}
+    \definecolor{codegray}{rgb}{0.5,0.5,0.5}
+    \definecolor{codepurple}{rgb}{0.58,0,0.82}
+    \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+    
+    \lstdefinestyle{mystyle}{
+        backgroundcolor=\color{backcolour},   
+        commentstyle=\color{codegreen},
+        keywordstyle=\color{magenta},
+        numberstyle=\tiny\color{codegray},
+        stringstyle=\color{codepurple},
+        basicstyle=\ttfamily\scriptsize,
+        breakatwhitespace=false,         
+        breaklines=true,                 
+        captionpos=b,                    
+        keepspaces=true,                 
+        numbers=left,                    
+        numbersep=5pt,                  
+        showspaces=false,                
+        showstringspaces=false,
+        showtabs=false,                  
+        tabsize=2
+    }
+    
+    \lstset{style=mystyle}
+    
+    \begin{document}
+    
+    \begin{frame}[fragile]
+    \frametitle{DeepONet Layer Call Implementation}
+    
+    \begin{lstlisting}[language=Python]
+    def predict(self, mu: tf.Tensor, x: tf.Tensor):
+        with tf.device(self.device):
+            #  branch network
+            coefficients = self.internal_model(mu)  # [batch, d_V]
+            batch_size = tf.shape(x)[0]
+            # trunk network, basis evaluation
+            # if x is already in the format [batch, n_points, dim_coords], treat it directly
+            if len(x.shape) == 3:
+                # flatten to treat each point as a separate input, batch differenciation is unuseful
+                n_points = tf.shape(x)[1]
+                x_flat = tf.reshape(x, [-1, x.shape[-1]])  # [batch*n_points, dim_coords]
+                basis_flat = self.external_model(x_flat)  # [batch*n_points, d_V], to be fed to the external               
+                basis_evaluation = tf.reshape(basis_flat, [batch_size, n_points, -1])  # [batch, n_points, d_V]
+                output = tf.einsum('bi,bji->bj', coefficients, basis_evaluation)  # tensor contraction [batch, n_points]
+                return output
+            else:
+                raise ValueError(f"Format de x incorrect. Attendu [batch, n_points, dim_coords], reçu {x.shape}")
+    \end{lstlisting}
+    
+    \end{frame}
+    
+    \end{document}
