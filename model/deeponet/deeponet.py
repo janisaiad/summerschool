@@ -9,6 +9,8 @@ import json
 from sklearn.model_selection import train_test_split
 from datetime import datetime
 
+from sciml.data.preprocessing import get_mu_xs_sol
+
 dotenv.load_dotenv()
 
 PROJECT_ROOT = os.getenv("PROJECT_ROOT")
@@ -54,7 +56,7 @@ def make_json_serializable(obj):
 
 class DeepONet(tf.keras.Model):
     ### DeepONet class ###
-    def __init__(self, hyper_params: dict, regular_params: dict): 
+    def __init__(self, hyper_params: dict, regular_params: dict,folder_path:str): 
         """
         regular_params: dict
             - internal_model: tensorflow model for the internal basis-coefficient learning function, (input functions at grid points) R^d_p -> R^d_v (coefficients)
@@ -112,7 +114,7 @@ class DeepONet(tf.keras.Model):
         self.folder_path = None  
     
         self.output_dim = hyper_params["output_dim"] if "output_dim" in hyper_params else None
-        
+        self.folder_path = folder_path
         
         logger.info(f"Model initialized with {self.n_epochs} epochs, {self.batch_size} batch size, {self.learning_rate} learning rate")
     
@@ -181,7 +183,9 @@ class DeepONet(tf.keras.Model):
         
         return mus, xs, sol
     
-    
+    def get_data_given(self,folder_path:str,type:float,training:bool=True)->tuple[tf.Tensor,tf.Tensor,tf.Tensor]:
+        mus,xs,sol = get_mu_xs_sol(folder_path,type,training)
+        return mus,xs,sol
     
     # mandatory methods to be implemented for keras
     def call(self,mu:tf.Tensor,x:tf.Tensor)->tf.Tensor:
@@ -199,9 +203,11 @@ class DeepONet(tf.keras.Model):
     
     
     ### managing model training methods ###
-    def fit(self,device:str='GPU',inputs=None,sol=None)->np.ndarray:
-        
-        mus,xs, sol = self.get_data(self.folder_path)
+    def fit(self,device:str='GPU',inputs=None,sol=None,given=True,type=0.2,training=True)->np.ndarray:
+        if given:
+            mus,xs, sol = self.get_data_given(self.folder_path,type,training)
+        else:
+            mus,xs, sol = self.get_data(self.folder_path)
         loss_history_train = []
         loss_history_test = []
         
