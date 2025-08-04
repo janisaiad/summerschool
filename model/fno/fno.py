@@ -57,7 +57,7 @@ import numpy as np
 
 class LinearLayer(tf.keras.layers.Layer):
     # [batch, p_1, p_1, n_coords] -> [batch, p_1, p_1, n_modes]
-    def __init__(self,n_modes:int,initializer:str='normal',device:str='GPU',p_1:int=30): # attention ici
+    def __init__(self,n_modes:int,initializer:str='normal',device:str='CPU',p_1:int=30): # attention ici
         super().__init__()
         self.n_modes = n_modes
         self.initializer = initializer
