@@ -1,5 +1,5 @@
 # Python-specific directories
-SCIML.egg-info/
+summerschool.egg-info/
 .venv/
 # Lock files
 uv.lock
