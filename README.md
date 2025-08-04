@@ -80,13 +80,26 @@ sciml/
 
 ## 📚 Usage
 
-### Data Generation
+### Data Generation for the summer school
 
-Data generation scripts are located in the `data/generation/` directory. Example usage:
-
-```bash
-python data/generation/generate_big_heat_fno.py
+The project includes pre-generated benchmark datasets for training and testing. The data is organized as follows:
+Download from the drive and copy to the `data/benchmarks/given/` directory. It should be in the following format:
 ```
+data/
+├── benchmarks/
+│   ├── given/
+│   │   ├── f_test_data.npy
+│   │   ├── f_train_data.npy
+│   │   ├── u_test_data_c0.2.npy
+│   │   ├── u_test_data_c0.5.npy
+│   │   ├── u_test_data_c1.0.npy
+│   │   ├── u_train_data_c0.2.npy
+│   │   ├── u_train_data_c0.5.npy
+│   │   ├── u_train_data_c1.0.npy
+│   │   ├── view_ref_soln.ipynb
+│   │   ├── view_ref_soln.py
+│   │   ├── x.npy
+
 
 ### Training Models
 
@@ -133,6 +146,7 @@ uv pip uninstall jax jaxlib
 uv add jax
 uv add jaxlib==0.4.17
 ```
+
 
 ## 📝 Research Notes and Observations
 
