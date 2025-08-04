@@ -1,0 +1,1 @@
+{"freq": 1.0, "initial_conditions": "np.exp(-(np.linspace(0,1,nx)**2 + np.linspace(0,1,ny)**2))", "nt": 20, "nx": 20, "ny": 20, "alpha": 0.01}

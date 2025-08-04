@@ -46,7 +46,7 @@ external_model = tf.keras.Sequential([
 
 # -
 
-folder_path = "data/test_data/example_data/heat2d/"
+folder_path = "data/test_data/big_dataset_deeponet/heat2d/"
 
 model = DeepONet(regular_params={"internal_model": internal_model, "external_model": external_model}, hyper_params={"d_p": d_p, "d_V": d_V,"device": "GPU","n_epochs":epochs})
 
