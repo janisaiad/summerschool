@@ -165,7 +165,9 @@ maybe we can try to enforce it by a last layer at the end, so we have to resolve
 does not work (see the litterature before) there should be something under the hood
 but the other thing is that the 1 shot learning can be useful also
 
-
+fno and pinn fno to try
+deepxde baseline to try also
+we are also under the sobolev training setup, so there is the theory behind to disentangle
 ### FNO Performance
 - Too many Fourier layers destabilize training
 - Consider sequential temporal inference
