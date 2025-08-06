@@ -150,6 +150,24 @@ uv add jaxlib==0.4.17
 
 ## 📝 Research Notes and Observations
 
+### optimization 
+
+lr scheduling done better
+The equation is local, so we should test the local one shot learning ! in a setup where we want to solve the inverse problem also
+and we generate our dataset using this pinn-deeponet
+be careful with data augmentation, because it's useful for foundation model but for local models it's not useful
+
+code with dv dp is a bit broken but still need to be refined after
+
+the main idea to put the emphasis on is that empirically the supervised learning setup is
+hard to enforce the boundary condition because it has to be learnt on every basis I guess
+maybe we can try to enforce it by a last layer at the end, so we have to resolve it, try and if it 
+does not work (see the litterature before) there should be something under the hood
+but the other thing is that the 1 shot learning can be useful also
+
+fno and pinn fno to try
+deepxde baseline to try also
+we are also under the sobolev training setup, so there is the theory behind to disentangle
 ### FNO Performance
 - Too many Fourier layers destabilize training
 - Consider sequential temporal inference

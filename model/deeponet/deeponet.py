@@ -8,6 +8,7 @@ import dotenv
 import json
 from sklearn.model_selection import train_test_split
 from datetime import datetime
+from sciml.utils.utils import custom_pinn_loss_2nd_order
 
 from sciml.data.preprocessing import get_mu_xs_sol
 
@@ -109,13 +110,23 @@ class DeepONet(tf.keras.Model):
         self.n_epochs = hyper_params["n_epochs"] if "n_epochs" in hyper_params else 100
         self.batch_size = hyper_params["batch_size"] if "batch_size" in hyper_params else 32
         self.verbose = hyper_params["verbose"] if "verbose" in hyper_params else 1
+        self.pinn_order = None
+        if 'pinn_order' in hyper_params:
+            self.pinn_order = hyper_params["pinn_order"]
+            self.pinn_coeff = hyper_params["pinn_coeff"]
+        else:
+            self.pinn_coeff = tf.constant([1,1,1],dtype=tf.float32)
+        
         self.loss_function = hyper_params["loss_function"] if "loss_function" in hyper_params else tf.losses.MeanSquaredError()
+        
+        
         self.device = hyper_params["device"] if "device" in hyper_params else 'cpu'
         self.folder_path = None  
     
         self.output_dim = hyper_params["output_dim"] if "output_dim" in hyper_params else None
         self.folder_path = folder_path
-        
+        self.enforce_boundary = hyper_params["enforce_boundary"] if "enforce_boundary" in hyper_params else False
+    
         logger.info(f"Model initialized with {self.n_epochs} epochs, {self.batch_size} batch size, {self.learning_rate} learning rate")
     
     
@@ -192,6 +203,10 @@ class DeepONet(tf.keras.Model):
         return self.predict(mu,x)
     
     
+    
+    
+    
+    
     def compile(self): # apparently mandatory to compile the model
         self.optimizer = self.hyper_params["optimizer"] if "optimizer" in self.hyper_params else tf.optimizers.Adam(self.learning_rate)
         self.loss_function = self.hyper_params["loss_function"] if "loss_function" in self.hyper_params else tf.losses.MeanSquaredError()
@@ -248,7 +263,11 @@ class DeepONet(tf.keras.Model):
     def test_step(self,batch:tuple[tf.Tensor,tf.Tensor,tf.Tensor])->tf.Tensor:
         mu,x,sol = batch
         y_pred = self.predict(mu,x)
-        loss = self.loss_function(y_pred,sol)
+        
+        if self.pinn_order is not None:
+            loss = custom_pinn_loss_2nd_order(self,mu,x,sol,self.pinn_coeff)
+        else:
+            loss = self.loss_function(y_pred,sol)
         return loss
             
         
@@ -261,9 +280,14 @@ class DeepONet(tf.keras.Model):
         with tf.GradientTape() as tape:
             # Prédiction
             y_pred = self.predict(mu, x)
-            
-            # Calcul direct de la perte
-            loss = self.loss_function(y_pred, sol)
+            if self.pinn_order is not None:
+                # we use then the pinn type loss function
+                loss = custom_pinn_loss_2nd_order(self,mu,x,sol,self.pinn_coeff)
+            else:
+                # we use then the custom loss function
+                loss = self.loss_function(y_pred,sol)
+            # calcul direct de la perte
+            #loss = self.loss_function(y_pred, sol)
         
         # Backpropagation
         gradients = tape.gradient(loss, self.trainable_variables)
