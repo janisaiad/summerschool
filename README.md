@@ -153,6 +153,8 @@ uv add jaxlib==0.4.17
 ### optimization 
 
 lr scheduling done better
+The equation is local, so we should test the local one shot learning ! in a setup where we want to solve the inverse problem also
+and we generate our dataset using this pinn-deeponet
 
 ### FNO Performance
 - Too many Fourier layers destabilize training
