@@ -125,7 +125,7 @@ class DeepONet(tf.keras.Model):
     
         self.output_dim = hyper_params["output_dim"] if "output_dim" in hyper_params else None
         self.folder_path = folder_path
-        
+        self.enforce_boundary = hyper_params["enforce_boundary"] if "enforce_boundary" in hyper_params else False
     
         logger.info(f"Model initialized with {self.n_epochs} epochs, {self.batch_size} batch size, {self.learning_rate} learning rate")
     

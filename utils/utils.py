@@ -82,5 +82,5 @@ def custom_pinn_loss_2nd_order(model:tf.keras.Model,mu:tf.Tensor,x:tf.Tensor,sol
     # now we enforce the boundary conditions
     boundary_loss = tf.reduce_mean(tf.square(y_pred[:,0]))
     boundary_loss += tf.reduce_mean(tf.square(y_pred[:,-1]))
-    pinn_loss += 0.5*boundary_loss
+    pinn_loss += 0.00*boundary_loss
     return pinn_loss
