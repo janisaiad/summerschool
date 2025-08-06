@@ -155,7 +155,9 @@ uv add jaxlib==0.4.17
 lr scheduling done better
 The equation is local, so we should test the local one shot learning ! in a setup where we want to solve the inverse problem also
 and we generate our dataset using this pinn-deeponet
+be careful with data augmentation, because it's useful for foundation model but for local models it's not useful
 
+code with dv dp is a bit broken but still need to be refined after
 ### FNO Performance
 - Too many Fourier layers destabilize training
 - Consider sequential temporal inference
