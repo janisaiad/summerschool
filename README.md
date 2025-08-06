@@ -150,6 +150,10 @@ uv add jaxlib==0.4.17
 
 ## 📝 Research Notes and Observations
 
+### optimization 
+
+lr scheduling done better
+
 ### FNO Performance
 - Too many Fourier layers destabilize training
 - Consider sequential temporal inference

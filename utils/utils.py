@@ -55,3 +55,32 @@ if __name__ == "__main__":
     with open("results/rademacher_fno_big/complexity.txt", "w") as f:
         f.write(str(compute_rademacher_complexity(inputs)) + "\n")
         f.write(str(compute_kolmogorov_width(inputs)))
+
+
+
+
+
+
+@tf.function
+def custom_pinn_loss_2nd_order(model:tf.keras.Model,mu:tf.Tensor,x:tf.Tensor,sol:tf.Tensor,coeff:tf.Tensor)->tf.Tensor:
+    
+    """ I just make a custome PINN type loss function, to use it then with deeponet"""
+    with tf.GradientTape(persistent=True) as tape:
+        tape.watch(x) # need to watch bc wrt to this input
+        
+        y_pred = model.predict(mu,x)    
+        dydx = tape.gradient(y_pred,x)
+        dydx = tf.squeeze(dydx,axis=-1) # because we have a 1D problem since x is a tensor
+        dydx = tf.cast(dydx,dtype=y_pred.dtype)
+        d2ydx2 = tape.gradient(dydx,x)
+        d2ydx2 = tf.squeeze(d2ydx2,axis=-1) # because we have a 1D problem
+        d2ydx2 = tf.cast(d2ydx2,dtype=y_pred.dtype) # because we have a 1D problem
+    del tape
+    terms  = tf.stack([d2ydx2,dydx,y_pred],axis=-1)
+    pde_terms = tf.reduce_sum(terms*coeff,axis=-1)
+    pinn_loss = tf.reduce_mean(tf.square(pde_terms-tf.cast(mu,dtype=y_pred.dtype))) # because we have a PDE of the form d2ydx2 + dydx + y = mu    
+    # now we enforce the boundary conditions
+    boundary_loss = tf.reduce_mean(tf.square(y_pred[:,0]))
+    boundary_loss += tf.reduce_mean(tf.square(y_pred[:,-1]))
+    pinn_loss += 0.01*boundary_loss
+    return pinn_loss
