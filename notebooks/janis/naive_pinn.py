@@ -1,3 +1,4 @@
+# %%
 
 
 # Start of Selection
@@ -28,16 +29,16 @@ from sciml.data.preprocessing.process_given_dataset import get_mu_xs_sol
 def create_pinn_model():
     """Un modèle Keras simple et standard."""
     inputs = tf.keras.Input(shape=(1,))
-    x_ = tf.keras.layers.Dense(256, activation='elu')(inputs)
-    x_ = tf.keras.layers.Dense(256, activation='elu')(x_)
+    x_ = tf.keras.layers.Dense(512, activation='elu')(inputs)
+    x_ = tf.keras.layers.Dense(512, activation='elu')(x_)
     outputs = tf.keras.layers.Dense(1)(x_)
     return tf.keras.Model(inputs=inputs, outputs=outputs)
 
 # --- 2. Chargement et préparation des données ---
 # nous chargeons les données et prenons seulement la première fonction
 all_mus, _, all_sols = get_mu_xs_sol(folder_path='/home/janis/SCIML/summerschool/data/benchmarks/given/', type=0.2, training=True)
-mu_func = all_mus[0]
-sol_func = all_sols[0]
+mu_func = all_mus[1]
+sol_func = all_sols[1]
 
 # nous définissons le domaine spatial x et nous nous assurons que tout est en float32
 x = tf.linspace(0., 1., 100)
@@ -85,12 +86,12 @@ for epoch in range(2001): # 2000 époques
     optimizer.apply_gradients(zip(grads, model.trainable_variables))
 
     if epoch % 200 == 0:
-        # nous calculons la perte l2 juste pour l'afficher, elle n'est pas utilisée pour l'entraînement
+        # we compute l2 loss just for display, it's not used for training
         l2_loss = tf.reduce_mean(tf.square(u_pred - sol_tensor))
-        print(f"Époque {epoch:4d}, Perte PINN: {total_loss:.6f}, Perte L2: {l2_loss:.6f}")
-        plt.plot(x.numpy(), sol_tensor.numpy(), 'k--', label='Solution de référence')
-        plt.plot(x.numpy(), u_pred.numpy(), 'r-', label='Prédiction PINN')
-        plt.title("Comparaison de la solution finale")
+        print(f"Epoch {epoch:4d}, PINN Loss: {total_loss:.6f}, L2 Loss: {l2_loss:.6f}")
+        plt.plot(x.numpy(), sol_tensor.numpy(), 'k--', label='Reference Solution')
+        plt.plot(x.numpy(), u_pred.numpy(), 'r-', label='PINN Prediction')
+        plt.title("Solution Comparison")
         plt.xlabel("x")
         plt.ylabel("u(x)")
         plt.legend()
