@@ -218,7 +218,7 @@ class DeepONet(tf.keras.Model):
     
     
     ### managing model training methods ###
-    def fit(self,device:str='GPU',inputs=None,sol=None,given=True,type=0.2,training=True)->np.ndarray:
+    def fit(self,device:str='GPU',inputs=None,sol=None,given=True,type=0.5,training=True)->np.ndarray:
         if given:
             mus,xs, sol = self.get_data_given(self.folder_path,type,training)
         else:

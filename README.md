@@ -168,6 +168,8 @@ but the other thing is that the 1 shot learning can be useful also
 fno and pinn fno to try
 deepxde baseline to try also
 we are also under the sobolev training setup, so there is the theory behind to disentangle
+
+transfer learning maybe since it do not converge for 0.5, with a new loss then
 ### FNO Performance
 - Too many Fourier layers destabilize training
 - Consider sequential temporal inference
