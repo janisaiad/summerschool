@@ -47,7 +47,7 @@ sol_tensor = tf.cast(tf.reshape(sol_func, (-1, 1)), tf.float32)
 
 # --- 3. Configuration de l'entraînement ---
 model = create_pinn_model()
-optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
+optimizer = tf.keras.optimizers.Adam(learning_rate=0.01)
 coeff = tf.constant([[-0.01, 0.2, 0]], dtype=tf.float32)
 
 # --- 4. Boucle d'entraînement simple ---
@@ -78,7 +78,7 @@ for epoch in range(2001): # 2000 époques
         loss_bc = tf.square(u_at_0) + tf.square(u_at_1)
         
         # Perte totale
-        total_loss = loss_pde + 0.1*loss_bc
+        total_loss = loss_pde + 0.5*loss_bc
 
     # nous mettons à jour les poids du réseau
     grads = tape.gradient(total_loss, model.trainable_variables)
