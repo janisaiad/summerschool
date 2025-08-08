@@ -44,11 +44,17 @@ def get_mu_xs_sol(folder_path,type, training=True): # we get that from the given
 if __name__ == "__main__":
     folder_path = "data/benchmarks/given/"
         
-    for type in [0.2, 0.5, 1.0]:
+    for type in [0.2, 0.5, 1]:
         mus, xs, sol = get_mu_xs_sol(folder_path,type)
         
-    mus, xs, sol = get_mu_xs_sol(folder_path,0.2)
+    mus, xs, sol = get_mu_xs_sol(folder_path,1)
     print("mus.shape", mus.shape)
     print("xs.shape", xs.shape)
     print("sol.shape", sol.shape)
+    
+    import matplotlib.pyplot as plt
+    for plot_index in range(20):
+        plt.plot(xs[plot_index,:],sol[plot_index,:], label='True')
+        plt.legend()
+        plt.show()
     
