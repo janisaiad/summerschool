@@ -265,7 +265,7 @@ class DeepONet(tf.keras.Model):
         y_pred = self.predict(mu,x)
         
         if self.pinn_order is not None:
-            loss = custom_pinn_loss_2nd_order(self,mu,x,sol,self.pinn_coeff)
+            loss = custom_pinn_loss_2nd_order(self,mu,x,sol,self.pinn_coeff)+self.loss_function(y_pred,sol)
         else:
             loss = self.loss_function(y_pred,sol)
         return loss
@@ -282,7 +282,7 @@ class DeepONet(tf.keras.Model):
             y_pred = self.predict(mu, x)
             if self.pinn_order is not None:
                 # we use then the pinn type loss function
-                loss = custom_pinn_loss_2nd_order(self,mu,x,sol,self.pinn_coeff)
+                loss = custom_pinn_loss_2nd_order(self,mu,x,sol,self.pinn_coeff)+self.loss_function(y_pred,sol)
             else:
                 # we use then the custom loss function
                 loss = self.loss_function(y_pred,sol)
