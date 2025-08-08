@@ -37,9 +37,9 @@ for d_p,d_V,learning_rate,width in [
     (20,20,0.001,128),
     (20,20,0.001,256),
     (20,20,0.0005,32),
-    (20,20,0.0005,64),
-    (20,20,0.0005,128),
-    (20,20,0.0005,256)]:
+    (40,40,0.0005,64),
+    (40,40,0.0005,128),
+    (40,40,0.0005,256)]:
     # %%
 
 
@@ -78,10 +78,12 @@ for d_p,d_V,learning_rate,width in [
             constrained_output = tf.concat([basis_boundary, constrained_bases], axis=1)
             
             return constrained_output
-    epochs = 20
+    epochs = 80
     # we create the normal branch model (no constraints needed)
     internal_model = tf.keras.Sequential([
         tf.keras.layers.InputLayer(shape=(100,)),
+        tf.keras.layers.Dense(width, activation='elu'),
+        tf.keras.layers.Dense(width, activation='elu'),
         tf.keras.layers.Dense(width, activation='elu'),
         tf.keras.layers.Dense(width, activation='elu'),
         tf.keras.layers.Dense(d_V, activation='elu')
@@ -92,6 +94,8 @@ for d_p,d_V,learning_rate,width in [
     base_external = tf.keras.Sequential([
         tf.keras.layers.InputLayer(shape=(1,)),
         tf.keras.layers.Dense(4*width, activation='elu'), # this 4 is arbitrary, it worked fine at a moment
+        tf.keras.layers.Dense(2*width, activation='elu'),
+        tf.keras.layers.Dense(2*width, activation='elu'),
         tf.keras.layers.Dense(2*width, activation='elu'),
         tf.keras.layers.Dense(d_V-1, activation='elu')  # we reduce by 1 for the boundary basis
     ])
@@ -148,7 +152,7 @@ for d_p,d_V,learning_rate,width in [
         plt.legend()  # we add legend
         plt.xscale('log')
         
-        plt.savefig(f"/home/janis/SCIML/summerschool/notebooks/janis/png/deeponet_pinn_d_p_{d_p}_d_V_{d_V}_width_{width}_learning_rate_{learning_rate}_train_test_loss_epoch_{k}.png")
+        plt.savefig(f"/home/janis/SCIML/summerschool/notebooks/janis/png2/deeponet_pinn_d_p_{d_p}_d_V_{d_V}_width_{width}_learning_rate_{learning_rate}_train_test_loss_epoch_{k}.png")
         plt.close()    
         # we test the model
         mu_test, xs_test, sol_test = get_mu_xs_sol(folder_path,1,training=False)
@@ -157,7 +161,7 @@ for d_p,d_V,learning_rate,width in [
             plt.plot(xs_test[i,:],sol_test[i,:], label='True')
             plt.plot(xs_test[i,:],preds[i,:], label='Predicted')
             plt.legend()
-            plt.savefig(f"/home/janis/SCIML/summerschool/notebooks/janis/png/deeponet_pinn_d_p_{d_p}_d_V_{d_V}_width_{width}_learning_rate_{learning_rate}_func_{i}_epoch_{k}.png")
+            plt.savefig(f"/home/janis/SCIML/summerschool/notebooks/janis/png2/deeponet_pinn_d_p_{d_p}_d_V_{d_V}_width_{width}_learning_rate_{learning_rate}_func_{i}_epoch_{k}.png")
             plt.close()
     # %%
     # we plot the basis functions learned by the DeepONet
@@ -183,7 +187,7 @@ for d_p,d_V,learning_rate,width in [
     plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')  # we place legend outside
     plt.grid(True, alpha=0.3)  # we add light grid
     plt.tight_layout()  # we adjust layout
-    plt.savefig(f"/home/janis/SCIML/summerschool/notebooks/janis/png/deeponet_pinn_d_p_{d_p}_d_V_{d_V}_width_{width}_learning_rate_{learning_rate}_basis_functions.png")
+    plt.savefig(f"/home/janis/SCIML/summerschool/notebooks/janis/png2/deeponet_pinn_d_p_{d_p}_d_V_{d_V}_width_{width}_learning_rate_{learning_rate}_basis_functions.png")
 
 
 
